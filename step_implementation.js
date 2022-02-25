@@ -31,6 +31,9 @@ const {
     below,
     focus,
     waitFor,
+    doubleClick,
+    highlight,
+    tableCell,
 } = require('taiko');
 const assert = require("assert");
 const headless = process.env.headless_chrome.toLowerCase() === 'true';
@@ -255,19 +258,19 @@ step("Click on the basket button", async function() {
 step("The popup is visible with the right elements", async function() {
     await focus($(`#checkout-related-products-popup`));
     let popup = await $(`#checkout-related-products-popup`).isVisible();
-    expect(await popup).to.equal(true);
+    expect(await popup).to.be.equal(true);
 
     await focus($(`//*[@id="checkout-related-products-popup"]/div/div/div[2]/div/div[1]/div[1]/div`));
     let productList = await $(`//*[@id="checkout-related-products-popup"]/div/div/div[2]/div/div[1]/div[1]/div`).isVisible();
-    expect(await productList).to.equal(true);
+    expect(await productList).to.be.equal(true);
 
-    await focus($(`//*[@id="checkout-related-products-popup"]/div/div/div[2]/div/div[1]/div[2]/div/div/div[2]/div/div`));
-    let radioBtn = await $({class:'control control--radio control--radio--form form-group__radio'}).isVisible();
-    expect(await radioBtn).to.equal(true);
+    await radioButton('+1 év garancia (7 295 Ft)').select();
 
-    /*await focus($(`//*[@id="checkout-related-products-popup"]/div/div/div[2]`));
-    let tovabb = await button($(`//*[@id="checkout-related-products-popup"]/div/div/div[2]/div/div[2]/button`)).isVisible();
-    expect(await tovabb).to.equal(true);*/
+    await click(button('TOVÁBB'));
+
+    await focus($(`//*[@id="app"]/aside`));
+    let sidebar = await $(`//*[@id="app"]/aside`).isVisible();
+    expect(await sidebar).to.be.equal(true);
 });
 
 step("Click on extra guarantee button", async function() {
@@ -280,8 +283,9 @@ step("Click on the manufacturers page", async function() {
 });
 
 step("Check on the extra guarantee price", async function() {
-    await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[2]/div/div[2]/div`), waitForEvents('DOMContentLoaded'));
-    expect(await $({class: 'product__guarantee-value'}).isVisible()).to.equal(true);
+    await focus($('a[href*=reszletek]'));
+    await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[2]/div/div[2]/div`));
+    expect(await $(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[2]/div/div[2]/div`).isVisible()).to.be.equal(true);
 	
 });
 
@@ -303,14 +307,35 @@ step("Click on Mentett termekek", async function() {
 
 step("The product is there", async function() {
 	await focus($(`//*[@id="app"]/div[1]/main/div[3]/div/div/div[1]/div`));
-    let product = await ($(`//*[@id="app"]/div[1]/main/div[3]/div/div/div[1]/div`)).isVisible();
-    expect(await product).to.be.equal(true);
+    await click($(`//*[@id="app"]/div[1]/main/div[3]/div/div/div[1]/div`));
 });
 
 step("There is the toast message with the right elements", async function() {
 	await focus($(`//*[@id="app"]/aside`));
-    let toast = await ($(`//*[@id="app"]/aside`)).isVisible();
-    expect(await toast).to.be.equal(true);
+    let visible = await ($(`//*[@id="app"]/aside`)).isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($('.basket-card__content'));
+    visible = await $('.basket-card__content').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($('.basket-card__gift__body'));
+    visible = await $('.basket-card__gift__body').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($('.basket__total-gross-price'));
+    visible = await $('.basket__total-gross-price').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($(`//*[@id="app"]/aside/div/div/div/div[4]/div/div`));
+    visible = await $(`//*[@id="app"]/aside/div/div/div/div[4]/div/div`).isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await click(link('MEGVESZEM'));
+
+    await focus($('#checkout-login-popup'));
+    visible = await $('#checkout-login-popup').isVisible();
+    expect(await visible).to.be.equal(true);
 });
 
 step("Check the URL for <page>", async function(page) {
@@ -344,9 +369,220 @@ step("Check on the rating section", async function() {
 });
 
 step("Click on the second picture button", async function() {
-	await focus($('#slick-slide-control51'));
+	await focus($('#slick-slide-control51')); 
     await click($('#slick-slide-control51'));
-    await focus($(`//*[@id="slick-slide51"]/a`));
-    let firstPic = await $(`a[href*='media.icdn.hu/product/GalleryMod/2021-05/701724/resp/1650412_samsung_t225_galaxy_tab_a7_lite_87_32gb_lte_szurke.webp']`).isVisible();
-    expect(await firstPic).to.be.equal(true);
+});
+
+step("Click on the silver colored button", async function() {
+	await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/a`));
+    await click($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/a`));
+});
+
+step("Click on the main picture of the product", async function() {
+	await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[1]/div[3]/div/div/div/a/img`));
+    await click($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[1]/div[3]/div/div/div/a/img`));
+});
+
+step("Check on the main picture", async function() {
+	await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[2]`));
+    let picture = await $(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[2]`).isVisible();
+    expect(await picture).to.be.equal(true);
+});
+
+step("Click on csatlakozz most hyperlink", async function() {
+	await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[2]/div/div[2]/a`));
+    await click('csatlakozz most');
+});
+
+step("Check on the subsrciption pop-up", async function() {
+	await focus ($('#subscription-popup'));
+    let popup = await $('#subscription-popup').isVisible();
+    expect(await popup).to.be.equal(true);
+
+});
+
+step("Click on subscription button", async function() {
+	await focus($(`a[href*='/profil/elofizetes']`));
+    await click($(`a[href*='/profil/elofizetes']`));
+});
+
+step("Check on some input fileds", async function() {
+	await focus($('#subscription_lastname'));
+    let isVisible = await $('#subscription_lastname').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($('#subscription_firstname'));
+    isVisible = await $('#subscription_firstname').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($('#subscription_email'));
+    isVisible = await $('#subscription_email').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($('#subscription_address'));
+    isVisible = await $('#subscription_address').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus(button('ELŐFIZETÉS'));
+    isVisible = await button('ELŐFIZETÉS').isVisible();
+    expect(await isVisible).to.be.equal(true);
+});
+
+step("Scroll down to some extent", async function() {
+	await focus($(`//*[@id="app"]/div[1]/main/section[2]/div/div/div/div[3]/div[1]/div[2]/div/div[2]/a`));
+});
+
+step("Check on the toast message elements", async function() {
+	await focus($('.product-sticky__title-body-wrapper'));
+    let isVisible = await $('.product-sticky__title-body-wrapper').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($('.product-sticky__price-wrapper'));
+    isVisible = await $('.product-sticky__price-wrapper').isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($(`//*[@id="app"]/div[1]/main/div[1]/div/div/div[3]`));
+    isVisible = await $(`//*[@id="app"]/div[1]/main/div[1]/div/div/div[3]`).isVisible();
+    expect(await isVisible).to.be.equal(true);
+
+    await focus($('.product-sticky__button-wrapper'));
+    isVisible = await $('.product-sticky__button-wrapper').isVisible();
+    expect(await isVisible).to.be.equal(true);
+});
+
+step("Resize window", async function() {
+	await resizeWindow({width: 1300, height: 700});
+});
+
+step("Click on vissza a tetejere", async function() {
+	await focus(link('vissza a tetejére'));
+    await click(link('vissza a tetejére'));
+});
+
+step("Check the page is on top", async function() {
+	await focus($('.page-top-nav'));
+    let topNav = await $('.page-top-nav').isVisible();
+    expect(await topNav).to.be.equal(true);
+});
+
+step("Click on Arfigyelo tab", async function() {
+	await focus(link('Árfigyelő'));
+    await click(link('Árfigyelő'));
+});
+
+step("Check on Arfigyelo topic", async function() {
+	await focus($('#arfigyelo'));
+    let isVisible = await $('#arfigyelo').isVisible();
+    expect(await isVisible).to.be.equal(true);
+});
+
+step("Scroll down to Reszletes leiras", async function() {
+    await focus(button('Kérdezek'));
+	await focus($(`//*[@id="app"]/div[1]/main/section[8]`));
+});
+
+step("Check if the Reszletek tab is highlighted", async function() {
+	await focus(listItem({class: 'product-sticky__nav__item is-active is-active-gumshoe'}));
+    let reszletek = await listItem({class: 'product-sticky__nav__item is-active is-active-gumshoe'}).text();
+    expect(await reszletek).to.be.equal('Részletek');
+});
+
+step("Delete the default value and write <input> in the count textbox", async function(input) {
+	await focus($(`//*[@id="app"]/div[1]/main/div[1]/div/div/div[3]`));
+    await click($(`//*[@id="app"]/div[1]/main/div[1]/div/div/div[3]`));
+    await press('Backspace');
+    await write(input);
+
+});
+
+step("Check on the error message", async function() {
+	await focus($('#toast-container'));
+    let isVisible = ($('#toast-container')).isVisible();
+    expect(await isVisible).to.be.equal(true);
+});
+
+step("Click on the basket button in the toast message", async function() {
+	await focus($('.product-sticky__button-wrapper'));
+    await click($('.product-sticky__button-wrapper'));
+});
+
+step("Write <price> in the price notification textbox", async function(price) {
+	await focus($('.product-pricegraph__notification__input'));
+    await doubleClick($('.product-pricegraph__notification__input'));
+    await press('Delete');
+    await doubleClick($('.product-pricegraph__notification__input'));
+    await press('Delete');
+    await write(price);
+});
+
+step("Check on the price watcher pop-up", async function() {
+    await focus($('#price-watcher-popup'));
+	let visible = await $('#price-watcher-popup').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($('#price_watcher_email'));
+    visible = await $('#price_watcher_email').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($('#price_watcher_price'));
+    visible = await $('#price_watcher_price').isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus(button({class:'product-pricegraph__notification__button button button--primary button--text--default button--cta'}));
+    visible = await button({class:'product-pricegraph__notification__button button button--primary button--text--default button--cta'}).isVisible();
+    expect(await visible).to.be.equal(true);
+});
+
+step("Click on ertesitest kerek button", async function() {
+	await focus(button('Értesítést kérek'));
+    await click(button('Értesítést kérek'));
+});
+
+step("Click on Teljes specifikacio button", async function() {
+	await focus($(`//*[@id="specifikacio"]/div/div[2]/div[2]`));
+    await click($('//*[@id="specifikacio"]/div/div[2]/div[2]'));
+});
+
+step("Check on the last element in the specification", async function() {
+    await focus(link('Hibás adat?'));
+    await focus($(`//*[@id="specifikacio"]/div/div[2]`));
+    let text = await tableCell({row:18, col:1}).text();
+    expect(await text).to.be.equal('Súly');
+});
+
+step("Click on Mutass kevesebbet button", async function() {
+	await focus($(`//*[@id="specifikacio"]/div/div[2]/div[2]`));
+    await click($('//*[@id="specifikacio"]/div/div[2]/div[2]'));
+});
+
+step("Scroll up", async function() {
+	await focus(link('Hibás adat?'));
+});
+
+step("Click on Vissza az oldal tetejere button at the bottom of the page", async function() {
+	await focus($(`//*[@id="app"]/div[1]/footer/div[1]/a`));
+    await focus($(`//*[@id="app"]/div[1]/main/section[9]/div/div/div/div[5]/div[1]/div/div/button`));
+    await click($(`//*[@id="app"]/div[1]/footer/div[1]/a`));
+});
+
+step("Check on the second picture", async function() {
+	await focus($('#slick-slide51'));
+    await click($('#slick-slide51'));
+    await focus(listItem({id:'splide01-slide02'}));
+    let visible = listItem({id:'splide01-slide02'}).isVisible();
+    expect(await visible).to.be.equal(true);
+    press('Escape');
+});
+
+step("Click on the fifth picture button", async function() {
+	await focus($('#slick-slide-control54')); 
+    await click($('#slick-slide-control54'));
+});
+
+step("Check on the fifth picture", async function() {
+	await focus($('#slick-slide54'));
+    await click($('#slick-slide54'));
+    await focus(listItem({id:'splide01-slide04'}));
+    let visible = listItem({id:'splide01-slide04'}).isVisible();
+    expect(await visible).to.be.equal(true);
 });
