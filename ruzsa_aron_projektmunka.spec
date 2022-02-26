@@ -16,6 +16,7 @@
 * Click on the basket button
 * There is the toast message with the right elements
 
+
 4.
 ## Favorite button is working properly while the user is logged in
 * Login
@@ -24,6 +25,7 @@
 * The product is there
 * Check the URL for "1925626"
 * Click on the favorite button
+* Logout
 
 5.
 ## Favorite button is working properly while the user is not logged in
@@ -118,13 +120,15 @@ Ez a scenario nem automatizálható, mivel nem tudok rákattintatni a megjelenő
 * Click on Teljes specifikacio button
 * Check on the last element in the specification
 
-21.**
-## Check on the button of the details closing is working
-* Click on Teljes specifikacio button
-* Click on Mutass kevesebbet button
-* Scroll up
+21.
+Check on the button of the details closing is working
+Ezt a scenariot sem tudtam automatizálni, mivel valamiért nem mindig jelent meg a "Mutass kevesebbet gomb", 
+illetve a scroll parancsot sehogy sem sikerült működésre bírni.
 
-22.**
+22.
+## Carousel checking
+* Click on Teljes specifikacio button
+* Check the carousel is working properly
 
 23. 
 ## Check on etting back to the top button is working

@@ -34,6 +34,7 @@ const {
     doubleClick,
     highlight,
     tableCell,
+    reload,
 } = require('taiko');
 const assert = require("assert");
 const headless = process.env.headless_chrome.toLowerCase() === 'true';
@@ -271,6 +272,8 @@ step("The popup is visible with the right elements", async function() {
     await focus($(`//*[@id="app"]/aside`));
     let sidebar = await $(`//*[@id="app"]/aside`).isVisible();
     expect(await sidebar).to.be.equal(true);
+
+
 });
 
 step("Click on extra guarantee button", async function() {
@@ -290,6 +293,7 @@ step("Check on the extra guarantee price", async function() {
 });
 
 step("Login", async function() {
+    await focus ($(`a[class='site-sub-nav__link site-sub-nav__link--has-icon']`));
 	await click($(`a[class='site-sub-nav__link site-sub-nav__link--has-icon']`));
     await write('Zerdyl', $('#_username'));
     await write('FlowAcademy', $('#_password'));
@@ -585,4 +589,38 @@ step("Check on the fifth picture", async function() {
     await focus(listItem({id:'splide01-slide04'}));
     let visible = listItem({id:'splide01-slide04'}).isVisible();
     expect(await visible).to.be.equal(true);
+});
+
+step("Check the first item of the carousel", async function() {
+    
+});
+
+step("Click on the arrow button", async function() {
+	
+});
+
+step("Check the carousel is working properly", async function() {
+    await focus($(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[1]`));
+    let carouselItem = await $(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[1]`).text();
+    let visible = await $(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[1]`).isVisible();
+    expect(await visible).to.be.equal(true);
+
+    await focus($(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/span[2]/span`));
+    await click($(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/span[2]/span`));
+
+	await focus($(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[5]`));
+    let newItem = await $(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[5]`).text();
+    visible = await $(`//*[@id="app"]/div[1]/main/section[4]/div/section/div[2]/div/div/div/div[5]`).isVisible();
+    expect(await visible).to.be.equal(true);
+
+    let match = true;
+    if (carouselItem != newItem) {
+        match = false;
+    }
+    expect(await match).to.be.equal(false);
+});
+
+step("Logout", async function() {
+	await click(link({class: 'site-sub-nav__link site-sub-nav__link--has-icon site-sub-nav__link--has-dropdown'}));
+    await click(link('Kilépés'));
 });
