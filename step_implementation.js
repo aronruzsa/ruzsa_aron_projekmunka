@@ -35,6 +35,7 @@ const {
     highlight,
     tableCell,
     reload,
+    closeTab,
 } = require('taiko');
 const assert = require("assert");
 const headless = process.env.headless_chrome.toLowerCase() === 'true';
@@ -538,8 +539,8 @@ step("Check on the price watcher pop-up", async function() {
 });
 
 step("Click on ertesitest kerek button", async function() {
-	await focus(button('Értesítést kérek'));
-    await click(button('Értesítést kérek'));
+    await focus(button({class:'product-pricegraph__notification__button button button--primary button--text--default button--cta'}));
+    await click(button({class:'product-pricegraph__notification__button button button--primary button--text--default button--cta'}));
 });
 
 step("Click on Teljes specifikacio button", async function() {
@@ -621,6 +622,25 @@ step("Check the carousel is working properly", async function() {
 });
 
 step("Logout", async function() {
+    await focus(link({class: 'site-sub-nav__link site-sub-nav__link--has-icon site-sub-nav__link--has-dropdown'}));
 	await click(link({class: 'site-sub-nav__link site-sub-nav__link--has-icon site-sub-nav__link--has-dropdown'}));
     await click(link('Kilépés'));
 });
+
+step("Clear basket and reload the page", async function() {
+	await click(link({class: 'basket__delete-all-link'}));
+    await goto('https://ipon.hu/shop/termek/samsung-t220-galaxy-tab-a7-lite-87-32gb-wifi-szurke/1925626', waitFor('DOMContentLoaded'));
+});
+
+step("Press <button>", async function(button) {
+	await press(button);
+});
+
+step("Go to the product page", async function() {
+	await goto('https://ipon.hu/shop/termek/samsung-t220-galaxy-tab-a7-lite-87-32gb-wifi-szurke/1925626', waitFor('DOMContentLoaded'));
+});
+
+step("Close tab", async function() {
+	await closeTab();
+});
+
